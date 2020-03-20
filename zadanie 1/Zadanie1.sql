@@ -1,6 +1,21 @@
 -- Paweł Ciupka 234048
 -- Maciej Majchrowski 234
 --
+--
+--------------------
+DROP TABLE transaction;
+
+DROP TABLE package;
+
+DROP TABLE product;
+
+DROP TABLE food_type;
+
+DROP TABLE placement;
+
+DROP TABLE place;
+
+--------------------
 -- PLACE TABLE
 CREATE TABLE place (
   place_id number NOT NULL,
@@ -15,13 +30,13 @@ ALTER TABLE
 ADD
   CONSTRAINT place_pk PRIMARY KEY (place_id);
 
---
+--------------------
 -- PLACEMENT TABLE
 CREATE TABLE placement (
   placement_id number NOT NULL,
   info varchar2(50) NOT NULL,
   weight_limit number NOT NULL,
-  CONSTRAINT place_id FOREIGN KEY(place_id) REFERENCES place(place_id)
+  place_id number NOT NULL
 );
 
 ALTER TABLE
@@ -29,37 +44,12 @@ ALTER TABLE
 ADD
   CONSTRAINT placement_pk PRIMARY KEY (placement_id);
 
---
--- PACKAGE TABLE
-CREATE TABLE package (
-  package_id number NOT NULL,
-  name varchar2(50) NOT NULL,
-  CONSTRAINT product_id FOREIGN KEY(product_id) REFERENCES product(product_id),
-  expiration_date date NOT NULL,
-  CONSTRAINT placement_id FOREIGN KEY(placement_id) REFERENCES placement(placement_id)
-);
-
 ALTER TABLE
-  package
+  placement
 ADD
-  CONSTRAINT package_pk PRIMARY KEY (package_id);
+  CONSTRAINT fk_place FOREIGN KEY (place_id) REFERENCES place(place_id);
 
---
--- PRODUCT TABLE
-CREATE TABLE product (
-  product_id number NOT NULL,
-  name varchar2(50) NOT NULL,
-  producent varchar2(50) NOT NULL,
-  weight number NOT NULL,
-  CONSTRAINT foot_type_id FOREIGN KEY(foot_type_id) REFERENCES food_type(foot_type_id)
-);
-
-ALTER TABLE
-  product
-ADD
-  CONSTRAINT product_pk PRIMARY KEY (product_id);
-
---
+--------------------
 -- FOOD_TYPE TABLE
 CREATE TABLE food_type (
   food_type_id number NOT NULL,
@@ -71,19 +61,77 @@ ALTER TABLE
 ADD
   CONSTRAINT food_type_pk PRIMARY KEY (food_type_id);
 
---
+--------------------
+-- PRODUCT TABLE
+CREATE TABLE product (
+  product_id number NOT NULL,
+  name varchar2(50) NOT NULL,
+  producent varchar2(50) NOT NULL,
+  weight number NOT NULL,
+  food_type_id number NOT NULL
+);
+
+ALTER TABLE
+  product
+ADD
+  CONSTRAINT product_pk PRIMARY KEY (product_id);
+
+ALTER TABLE
+  product
+ADD
+  CONSTRAINT fk_food_type FOREIGN KEY (food_type_id) REFERENCES food_type(food_type_id);
+
+--------------------
+-- PACKAGE TABLE
+CREATE TABLE package (
+  package_id number NOT NULL,
+  name varchar2(50) NOT NULL,
+  product_id number NOT NULL,
+  expiration_date date NOT NULL,
+  placement_id number NOT NULL
+);
+
+ALTER TABLE
+  package
+ADD
+  CONSTRAINT package_pk PRIMARY KEY (package_id);
+
+ALTER TABLE
+  package
+ADD
+  CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES product(product_id);
+
+ALTER TABLE
+  package
+ADD
+  CONSTRAINT fk_placement FOREIGN KEY (placement_id) REFERENCES placement(placement_id);
+
+--------------------
 -- TRANSACTION TABLE
 CREATE TABLE transaction (
   transaction_id number NOT NULL,
+  info varchar2(50) NOT NULL,
   time_stamp timestamp NOT NULL,
-  CONSTRAINT package_id FOREIGN KEY(package_id) REFERENCES package(package_id),
-  info varchar2(50) NOT NULL
+  package_id number NOT NULL
 );
 
 ALTER TABLE
   transaction
 ADD
   CONSTRAINT transaction_pk PRIMARY KEY (transaction_id);
+
+ALTER TABLE
+  transaction
+ADD
+  CONSTRAINT fk_package FOREIGN KEY (package_id) REFERENCES package(package_id);
+
+--------------------
+--------------------
+--------------------
+INSERT INTO
+  place (info, street, city, postal_code)
+VALUES
+  ('Zamieszkiwane przez rodzinę Kowalskich', "Aleja Politechniki 9", "Lodz", "93-590");
 
 / -- create table zabiegi (
 -- id_zabiegu number not null,

@@ -154,7 +154,34 @@ end;
 -- agregowanie rzeczy o tej samej dacie ważności i produkcie
 
 -- szukaj rzecz na polkach o krótszym terminie przydatności
+create or replace function find_less_fresh_product
+(
+    product_name in product.name%type
+)
+return placement.info%type is
+    nazwa_polki placement.info%type;
+begin
+  select placement.info into nazwa_polki from placement
+    inner join package 
+    on placement.placement_id = package.placement_id    
+    inner join product
+    on package.product_id = product.product_id
+    where product.name = 'Szynka drobiowa 100g'
+    ORDER BY package.expiration_date asc
+    FETCH FIRST 1 ROWS ONLY;
+return nazwa_polki;
+end;
+/
 
+-- wywołanie funkcji find_less_fresh_product
+declare
+    c placement.info%type;
+    product_name product.name%type := 'Szynka drobiowa 100g';
+begin 
+    c := find_less_fresh_product(product_name);
+    dbms_output.put_line('W magazynie: ' || product_name || ' jest na : ' || c);
+end;
+/
 -- jak dodajesz na polke coś, sprawdź czy nie będzie za ciężko
 
 -- produkt może mieć food_type tylko z określonego zakresu. 

@@ -37,17 +37,13 @@ create or replace procedure add_Package_Of_Product
     data_waznosci IN package.expiration_date%type
 )
 is
-liczba_wystapien_nazwy number;
 id_produktu number := 0;
 brak_produktu EXCEPTION;
 begin
     select product.product_id into id_produktu 
     from product
     where product.name = nazwa_produktu;
-liczba_wystapien_nazwy := sql%rowcount;
-if(id_produktu = 0) then 
-    raise brak_produktu;
-end if;
+    fetch next 1 rows only;
 INSERT INTO package(name, product_id, expiration_date, placement_id, package_size) 
 VALUES (
     nazwa_opakowania,
@@ -58,7 +54,7 @@ VALUES (
 );
 dbms_output.put_line('dodano nowe opakownie do bazy');
 exception
-    when brak_produktu then
+    when no_data_found then 
         dbms_output.put_line('nie znaleziono produktu o nazwie: ' || nazwa_produktu);
 end add_Package_Of_Product; 
 
@@ -78,16 +74,12 @@ create or replace procedure take_one_item
 )
 is
 id_package package.package_id%type := 0;
-brak_opakowania EXCEPTION;
 begin
     select package.package_id into id_package
     from package
     where package.name = nazwa_opakowania
     fetch next 1 rows only;
 
-if(id_package = 0)then
-    raise brak_opakowania;
-end if;
 update package
     set package_size=package_size - 1
     where package.package_id=id_package;
@@ -99,7 +91,7 @@ INSERT INTO transaction(info, time_stamp, package_id) VALUES
     id_package
 );
 exception 
-    when brak_opakowania then
+    when no_data_found then 
         dbms_output.put_line('nie znaleziono opakowania o nazwie: ' || nazwa_opakowania);
 end take_one_item;
 
@@ -119,16 +111,12 @@ create or replace procedure take_x_packages
 )
 is
 id_package package.package_id%type := 0;
-brak_odpowiedniej_liczby EXCEPTION;
 begin
     select package.package_id into id_package
     from package
     where package.name = nazwa_opakowania and package.package_size >= liczba_wyciaganych
     fetch next 1 rows only;
 
-if(id_package = 0)then
-    raise brak_odpowiedniej_liczby;
-end if;
 update package
     set package_size=(package_size-liczba_wyciaganych)
     where package.package_id=id_package;
@@ -141,7 +129,7 @@ INSERT INTO transaction(info, time_stamp, package_id, number_of_taken_items) VAL
     liczba_wyciaganych
 );
 exception 
-    when brak_odpowiedniej_liczby then
+    when no_data_found then 
         dbms_output.put_line('nie znaleziono opakowania o nazwie/nie ma tyle w magazynie: ' || nazwa_opakowania);
 end take_x_packages;
 
@@ -166,9 +154,14 @@ begin
     on placement.placement_id = package.placement_id    
     inner join product
     on package.product_id = product.product_id
-    where product.name = 'Szynka drobiowa 100g'
+    where product.name = product_name
     ORDER BY package.expiration_date asc
     FETCH FIRST 1 ROWS ONLY;
+
+exception
+  when no_data_found then
+    dbms_output.put_line('nie znaleziono produktu w magazynie: ' || product_name);
+
 return nazwa_polki;
 end;
 /

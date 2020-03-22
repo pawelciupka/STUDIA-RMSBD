@@ -15,10 +15,6 @@ DROP TABLE product;
 
 DROP SEQUENCE product_seq;
 
-DROP TABLE food_type;
-
-DROP SEQUENCE food_type_seq;
-
 DROP TABLE placement;
 
 DROP SEQUENCE placement_seq;
@@ -91,32 +87,7 @@ FROM
   dual;
 
 END;
-/ 
-
---------------------
--- FOOD_TYPE TABLE
-CREATE TABLE food_type (
-  food_type_id number NOT NULL,
-  name varchar2(50) NOT NULL
-);
-
-ALTER TABLE
-  food_type
-ADD
-  CONSTRAINT food_type_pk PRIMARY KEY (food_type_id);
-
-CREATE SEQUENCE food_type_seq START WITH 1;
-
-CREATE TRIGGER food_type_trigger BEFORE
-INSERT
-  ON food_type FOR EACH ROW BEGIN
-SELECT
-  food_type_seq.NEXTVAL INTO :new.food_type_id
-FROM
-  dual;
-
-END;
-/ 
+/
 
 --------------------
 -- PRODUCT TABLE
@@ -125,18 +96,13 @@ CREATE TABLE product (
   name varchar2(50) NOT NULL,
   producent varchar2(50) NOT NULL,
   weight number NOT NULL,
-  food_type_id number NOT NULL
+  food_type varchar(20) NOT NULL
 );
 
 ALTER TABLE
   product
 ADD
   CONSTRAINT product_pk PRIMARY KEY (product_id);
-
-ALTER TABLE
-  product
-ADD
-  CONSTRAINT fk_food_type FOREIGN KEY (food_type_id) REFERENCES food_type(food_type_id);
 
 CREATE SEQUENCE product_seq START WITH 1;
 
@@ -158,7 +124,8 @@ CREATE TABLE package (
   name varchar2(50) NOT NULL,
   product_id number NOT NULL,
   expiration_date date NOT NULL,
-  placement_id number NOT NULL
+  placement_id number NOT NULL,
+  package_size number default 1 NOT NULL
 );
 
 ALTER TABLE
@@ -195,7 +162,8 @@ CREATE TABLE transaction (
   transaction_id number NOT NULL,
   info varchar2(50) NOT NULL,
   time_stamp timestamp NOT NULL,
-  package_id number NOT NULL
+  package_id number NOT NULL,
+  number_of_taken_items number default 1 NOT NULL
 );
 
 ALTER TABLE

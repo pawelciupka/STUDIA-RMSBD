@@ -102,73 +102,51 @@ VALUES
     ('Polka numer 4', 5, 4);
 
 --------------------
--- INSERT DATA TO FOOD_TYPE TABLE
-INSERT INTO
-    food_type (name)
-VALUES
-    ('Mieso');
-
-INSERT INTO
-    food_type (name)
-VALUES
-    ('Nabial');
-
-INSERT INTO
-    food_type (name)
-VALUES
-    ('Napoj');
-
---------------------
 -- INSERT DATA TO PRODUCT TABLE
 INSERT INTO
-    product (name, producent, weight, food_type_id)
+    product (name, producent, weight, food_type)
 VALUES
-    ('Szynka drobiowa', 'Tarczynskie', 4, 1);
+    ('Szynka drobiowa 100g', 'Tarczynski', 0.1, 'bialko');
 
 INSERT INTO
-    product (name, producent, weight, food_type_id)
+    product (name, producent, weight, food_type)
 VALUES
-    ('Szynka konserwowa', 'Sokolow', 3, 1);
+    ('Szynka konserwowa 200g', 'Sokolow', 0.2, 'bialko');
 
 INSERT INTO
-    product (name, producent, weight, food_type_id)
+    product (name, producent, weight, food_type)
 VALUES
-    ('Piers z kurczaka', 'Biedronka', 9, 1);
+    ('Filet z piersi kurczaka 500g', 'Biedronka', 0.5, 'bialko');
 
 INSERT INTO
-    product (name, producent, weight, food_type_id)
+    product (name, producent, weight, food_type)
 VALUES
-    ('Ser Gouda', 'Biedronka', 2, 2);
+    ('Ser gouda 1kg', 'Hochland', 1, 'nabial');
 
 INSERT INTO
-    product (name, producent, weight, food_type_id)
+    product (name, producent, weight, food_type)
 VALUES
-    ('Ser wedzony', 'Lidl', 3, 2);
+    ('Ser wedzony w plastrach 200g', 'Lidl', 0.2, 'nabial');
 
 INSERT INTO
-    product (name, producent, weight, food_type_id)
+    product (name, producent, weight, food_type)
 VALUES
-    ('Ser Gouda', 'Biedronka', 2, 2);
+    ('Ser Gouda w plastrach 300g', 'Biedronka', 0.3, 'nabial');
 
 INSERT INTO
-    product (name, producent, weight, food_type_id)
+    product (name, producent, weight, food_type)
 VALUES
-    ('Ser w plastrach', 'Lindor', 7, 2);
+    ('Pepsi 2l', 'PepsiCola', 2, 'napoj');
 
 INSERT INTO
-    product (name, producent, weight, food_type_id)
+    product (name, producent, weight, food_type)
 VALUES
-    ('Pepsi', 'ColaCompany', 10, 3);
+    ('Coca Cola 1l', 'ColaCompany', 1, 'napoj');
 
 INSERT INTO
-    product (name, producent, weight, food_type_id)
+    product (name, producent, weight, food_type)
 VALUES
-    ('Coca Cola', 'ColaCompany', 15, 3);
-
-INSERT INTO
-    product (name, producent, weight, food_type_id)
-VALUES
-    ('Fanta', 'ColaCompany', 5, 3);
+    ('Fanta 500ml', 'ColaCompany', 0.5, 'napoj');
 
 --------------------
 -- INSERT DATA TO PACKAGE TABLE
@@ -176,39 +154,20 @@ INSERT INTO
     package (name, product_id, expiration_date, placement_id)
 VALUES
     (
-        'Torba - 10 szt',
+        'Paczka plastikowa',
         1,
         TO_DATE('2020/04/23', 'yyyy/mm/dd'),
         1
     );
 
 INSERT INTO
-    package (name, product_id, expiration_date, placement_id)
+    package (name, product_id, expiration_date, placement_id, package_size)
 VALUES
     (
-        '2 szt',
+        'Dwupak plastikowy',
         2,
         TO_DATE('2020/04/29', 'yyyy/mm/dd'),
-        1
-    );
-
-INSERT INTO
-    package (name, product_id, expiration_date, placement_id)
-VALUES
-    (
-        '4 szt',
-        3,
-        TO_DATE('2020/04/27', 'yyyy/mm/dd'),
-        1
-    );
-
-INSERT INTO
-    package (name, product_id, expiration_date, placement_id)
-VALUES
-    (
-        'Opakowanie - 2 szt',
-        4,
-        TO_DATE('2020/05/25', 'yyyy/mm/dd'),
+        1,
         2
     );
 
@@ -216,50 +175,75 @@ INSERT INTO
     package (name, product_id, expiration_date, placement_id)
 VALUES
     (
-        'Paczka - 3 szt',
-        5,
+        'Paczka plastikowa',
+        3,
+        TO_DATE('2020/04/27', 'yyyy/mm/dd'),
+        1
+    );
+
+INSERT INTO
+    package (name, product_id, expiration_date, placement_id, package_size)
+VALUES
+    (
+        'Opakowanie - 2 szt',
+        4,
+        TO_DATE('2020/05/25', 'yyyy/mm/dd'),
+        2,
+        2
+    );
+
+INSERT INTO
+    package (name, product_id, expiration_date, placement_id)
+VALUES
+    (
+        'Paczka plastikowa',
+        1,
         TO_DATE('2020/05/23', 'yyyy/mm/dd'),
         4
     );
 
 INSERT INTO
-    package (name, product_id, expiration_date, placement_id)
+    package (name, product_id, expiration_date, placement_id, package_size)
 VALUES
     (
-        '1 szt',
+        'Dwupak plastikowy',
         6,
         TO_DATE('2020/05/29', 'yyyy/mm/dd'),
-        6
+        6,
+        2
     );
 
 INSERT INTO
-    package (name, product_id, expiration_date, placement_id)
+    package (name, product_id, expiration_date, placement_id, package_size)
 VALUES
     (
         'Zgrzewka - 6 szt',
         7,
         TO_DATE('2021/08/21', 'yyyy/mm/dd'),
-        8
+        8,
+        6
     );
 
 INSERT INTO
-    package (name, product_id, expiration_date, placement_id)
+    package (name, product_id, expiration_date, placement_id, package_size)
 VALUES
     (
-        'Dwupak - 2 szt',
+        'Dwupak butelek',
         8,
         TO_DATE('2021/01/20', 'yyyy/mm/dd'),
-        8
+        8,
+        2
     );
 
 INSERT INTO
-    package (name, product_id, expiration_date, placement_id)
+    package (name, product_id, expiration_date, placement_id, package_size)
 VALUES
     (
-        '1 szt',
+        'Zgrzewka - 12 szt',
         9,
         TO_DATE('2022/01/02', 'yyyy/mm/dd'),
-        10
+        10,
+        12
     );
 
 --------------------

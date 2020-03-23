@@ -175,6 +175,91 @@ begin
     dbms_output.put_line('W magazynie: ' || product_name || ' jest na : ' || c);
 end;
 /
--- jak dodajesz na polke coś, sprawdź czy nie będzie za ciężko
+
+-- pobranie wagi paczki po podaniu id produktu a także wielkości tej paczki -> wykorzystane do triggera check_placement_capacity
+create or replace function get_weight_of_package_with_product_id
+(
+    current_product_id in package.package_id%type,
+    current_package_size in package.package_size%type
+)
+return placement.weight_limit%type is
+    final_weight placement.weight_limit%type := 0;
+begin
+select (current_package_size*product.weight) into final_weight
+      from package
+      inner join product on package.product_id = product.product_id
+      where product.product_id = current_product_id
+      fetch next 1 rows only;
+
+dbms_output.put_line('zwracana wartosc: '||final_weight);
+return final_weight;
+end;
+/
+
+declare
+    package_current_weight placement.weight_limit%type;
+    product_id_n product.product_id%type := 1;
+begin 
+    package_current_weight := get_weight_of_package_with_product_id(current_product_id=>1,current_package_size=>3
+                                                                    );
+end;
+/
+
+drop trigger check_placement_capacity;
+-- trigger sprawdzajacy czy mozna 
+create trigger check_placement_capacity
+before Insert on package
+REFERENCING NEW AS new OLD AS old
+FOR EACH ROW
+declare 
+    placement_current_cargo placement.weight_limit%type;
+    package_current_weight placement.weight_limit%type;
+    placement_weight_limit placement.weight_limit%type;
+    placement_overload EXCEPTION;
+begin
+-- podaj wage produktow jaka jest obecnie na polce do zmiennej
+    select sum(package.package_size * product.weight) into placement_current_cargo
+    from package
+    inner join product
+    on package.product_id = product.product_id
+    where package.placement_id = :new.placement_id;
+    
+    select placement.weight_limit into placement_weight_limit
+    from placement
+    where placement.placement_id = :new.placement_id
+    fetch next 1 rows only;
+    
+    package_current_weight := get_weight_of_package_with_product_id(current_product_id=>:new.product_id,
+                                                                    current_package_size=>:new.package_size);
+    if (package_current_weight + placement_current_cargo) > placement_weight_limit
+        then
+            raise placement_overload;
+    end if;
+    if (package_current_weight + placement_current_cargo) <= placement_weight_limit
+        then
+            dbms_output.put_line('dodano nowe opakowanie na polke: ' || :new.placement_id);
+    end if;
+    
+    EXCEPTION
+        when placement_overload then
+            dbms_output.put_line('polka nie zmiesci kolejnego opakowania, #polki:' || :new.placement_id);
+            rollback transaction
+        when no_data_found then
+            dbms_output.put_line('nie znaleziono odpowiedniech danych w bazie');
+end check_placement_capacity;
+/
+
+-- dodanie 100 paka za cieżkiego na polke -- jeszcze nie usuwa za duzego rekordu
+INSERT INTO
+    package (name, product_id, expiration_date, placement_id, package_size)
+VALUES
+    (
+        'Butelka 1l',
+        8,
+        TO_DATE('2021/01/20', 'yyyy/mm/dd'),
+        8,
+        100
+    );
+
 
 -- produkt może mieć food_type tylko z określonego zakresu. 

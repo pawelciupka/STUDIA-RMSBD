@@ -22,6 +22,8 @@ DROP SEQUENCE placement_seq;
 DROP TABLE place;
 
 DROP SEQUENCE place_seq;
+
+drop trigger check_placement_capacity;
 --------------------
 
 
@@ -98,6 +100,16 @@ CREATE TABLE product (
   weight number NOT NULL,
   food_type varchar(20) NOT NULL
 );
+
+ALTER TABLE
+  product
+ADD CONSTRAINT check_food_type_name
+  CHECK (food_type IN ('przyprawa', 'bialko', 'tluszcz', 'warzywa', 'weglowodany', 'nabial', 'napoj'));
+
+ALTER TABLE
+  product
+ADD CONSTRAINT check_food_weight
+  CHECK (weight > 0 );
 
 ALTER TABLE
   product

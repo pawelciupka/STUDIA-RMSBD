@@ -1,3 +1,9 @@
+-- TO DO:
+-- ADD PRODUCT_PHOTO TO PRODUCT TABLE
+-- ADD DATA INSERT FOR PRODUCT PHOTO
+-- PROCEDURE: LOAD ALL PHOTO FROM CATALOG 
+
+
 CREATE DIRECTORY MEDIA_FILES AS '/home/oracle/Desktop/Obrazy';
 commit;
 
@@ -55,12 +61,12 @@ show_photo_details(1);
 END;
 
 
--- odbicie lustrzane
+-- change photo contrast 
 ALTER TABLE product_photo ADD modyf_img ORDImage;
 commit;
 
 set serveroutput on
-CREATE OR REPLACE PROCEDURE process_photo ( id IN NUMBER ) IS
+CREATE OR REPLACE PROCEDURE change_photo_contrast ( id IN NUMBER, value IN NUMBER ) IS
 BEGIN
     DECLARE
         img0 ORDimage;
@@ -74,8 +80,7 @@ BEGIN
         SELECT img, modyf_img INTO img1,img2 FROM product_photo
         WHERE product_photo_id=id FOR UPDATE of img, modyf_img;
         img1.processCopy('maxScale 500 500', img2);
-        img2.process('flip');
-        img2.process('mirror');
+        img2.process('contrast = ' || value);
         UPDATE product_photo set modyf_img = img2 WHERE product_photo_id=1;
         COMMIT;
     EXCEPTION 
@@ -87,7 +92,7 @@ END;
 /
 
 BEGIN
-process_photo(1);
+change_photo_contrast(1, 100);
 END;
 
 

@@ -60,8 +60,9 @@ FROM
   dual;
 
 END;
+/ 
 
-/ --------------------
+--------------------
 -- PLACEMENT TABLE
 CREATE TABLE placement (
   placement_id number NOT NULL,
@@ -91,14 +92,16 @@ FROM
   dual;
 
 END;
+/ 
 
-/ --------------------
+--------------------
 -- PRODUCT PHOTO
 CREATE TABLE product_photo (
   product_photo_id NUMBER NOT NULL,
   filename VARCHAR2(50) NOT NULL,
   description VARCHAR2(100) NOT NULL,
-  img ORDimage
+  img ORDimage,
+  modyf_img ORDImage
 );
 
 ALTER TABLE
@@ -117,15 +120,17 @@ FROM
   dual;
 
 END;
+/
 
-/ --------------------
+--------------------
 -- PRODUCT TABLE
 CREATE TABLE product (
   product_id number NOT NULL,
   name varchar2(50) NOT NULL,
   producent varchar2(50) NOT NULL,
   weight number NOT NULL,
-  food_type varchar(20) NOT NULL
+  food_type varchar(20) NOT NULL,
+  product_photo_id number 
 );
 
 ALTER TABLE
@@ -153,6 +158,11 @@ ALTER TABLE
 ADD
   CONSTRAINT product_pk PRIMARY KEY (product_id);
 
+ALTER TABLE
+  product
+ADD
+  CONSTRAINT fk_product_photo FOREIGN KEY (product_photo_id) REFERENCES product_photo(product_photo_id);
+
 CREATE SEQUENCE product_seq START WITH 1;
 
 CREATE TRIGGER product_trigger BEFORE
@@ -164,8 +174,9 @@ FROM
   dual;
 
 END;
+/ 
 
-/ --------------------
+--------------------
 -- PACKAGE TABLE
 CREATE TABLE package (
   package_id number NOT NULL,
@@ -202,8 +213,9 @@ FROM
   dual;
 
 END;
+/ 
 
-/ -------------------
+-------------------
 -- TRANSACTION TABLE
 CREATE TABLE transaction (
   transaction_id number NOT NULL,
@@ -234,5 +246,4 @@ FROM
   dual;
 
 END;
-
 /

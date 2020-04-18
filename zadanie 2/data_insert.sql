@@ -97,77 +97,119 @@ INSERT INTO
 VALUES
     ('Polka numer 4', 5, 4);
 
+
+--------------------
+-- INSERT DATA TO PRODUCT PHOTO TABLE
+BEGIN
+add_photo('szynkaD100g.jpg', 'Szynka drobiowa');
+END;
+/
+BEGIN
+add_photo('konserwowa.jpg', 'Szynka konserwowa');
+END;
+/
+BEGIN
+add_photo('filetKurczak500g.jpg', 'Filet z piersi kurczaka');
+END;
+/
+BEGIN
+add_photo('gouda1kg.jpg', 'Ser gouda');
+END;
+/
+BEGIN
+add_photo('serWedzony.jpg', 'Ser wedzony');
+END;
+/
+BEGIN
+add_photo('pepsi2l.jpg', 'Pepsi');
+END;
+/
+BEGIN
+add_photo('cola1l.jpg', 'Coca-Cola');
+END;
+/
+BEGIN
+add_photo('fanta05l.jpg', 'Fanta');
+END;
+/
+
+
 --------------------
 -- INSERT DATA TO PRODUCT TABLE
 INSERT INTO
-    product (name, producent, weight, food_type)
+    product (name, producent, weight, food_type, product_photo_id)
 VALUES
     (
         'Szynka drobiowa 100g',
-        'Tarczynski',
+        'Sokolow',
         0.1,
-        'bialko'
+        'bialko',
+        1
     );
 
 INSERT INTO
-    product (name, producent, weight, food_type)
+    product (name, producent, weight, food_type, product_photo_id)
 VALUES
     (
         'Szynka konserwowa 200g',
-        'Sokolow',
+        'Krakus',
         0.2,
-        'bialko'
+        'bialko',
+        2
     );
 
 INSERT INTO
-    product (name, producent, weight, food_type)
+    product (name, producent, weight, food_type, product_photo_id)
 VALUES
     (
         'Filet z piersi kurczaka 500g',
         'Biedronka',
         0.5,
-        'bialko'
+        'bialko',
+        3
     );
 
 INSERT INTO
-    product (name, producent, weight, food_type)
+    product (name, producent, weight, food_type, product_photo_id)
 VALUES
-    ('Ser gouda 1kg', 'Hochland', 1, 'nabial');
+    ('Ser gouda 1kg', 'Mlekovita', 1, 'nabial', 4);
 
 INSERT INTO
-    product (name, producent, weight, food_type)
+    product (name, producent, weight, food_type, product_photo_id)
 VALUES
     (
         'Ser wedzony w plastrach 200g',
-        'Lidl',
+        'Mlekovita',
         0.2,
-        'nabial'
+        'nabial',
+        5
     );
 
 INSERT INTO
-    product (name, producent, weight, food_type)
+    product (name, producent, weight, food_type, product_photo_id)
 VALUES
     (
-        'Ser Gouda w plastrach 300g',
-        'Biedronka',
-        0.3,
-        'nabial'
+        'Ser Gouda w plastrach 150g',
+        'Mlekpol',
+        0.15,
+        'nabial',
+        4
     );
 
 INSERT INTO
-    product (name, producent, weight, food_type)
+    product (name, producent, weight, food_type, product_photo_id)
 VALUES
-    ('Pepsi 2l', 'PepsiCola', 2, 'napoj');
+    ('Pepsi 2l', 'PepsiCola', 2, 'napoj', 6);
 
 INSERT INTO
-    product (name, producent, weight, food_type)
+    product (name, producent, weight, food_type, product_photo_id)
 VALUES
-    ('Coca Cola 1l', 'ColaCompany', 1, 'napoj');
+    ('Coca Cola 1l', 'ColaCompany', 1, 'napoj', 7);
 
 INSERT INTO
-    product (name, producent, weight, food_type)
+    product (name, producent, weight, food_type, product_photo_id)
 VALUES
-    ('Fanta 500ml', 'ColaCompany', 0.5, 'napoj');
+    ('Fanta 500ml', 'ColaCompany', 0.5, 'napoj', 8);
 
 --------------------
 -- INSERT DATA TO PACKAGE TABLE

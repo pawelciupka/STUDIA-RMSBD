@@ -1,9 +1,3 @@
--- TO DO:
--- ADD PRODUCT_PHOTO TO PRODUCT TABLE
--- ADD DATA INSERT FOR PRODUCT PHOTO
--- PROCEDURE: LOAD ALL PHOTO FROM CATALOG 
-
-
 CREATE DIRECTORY MEDIA_FILES AS '/home/oracle/Desktop/Obrazy';
 commit;
 
@@ -31,9 +25,9 @@ BEGIN
 END;
 /
 
-BEGIN
-add_photo('product.png', 'Default icon representing product.');
-END;
+-- BEGIN
+-- add_photo('product.png', 'Default icon representing product.');
+-- END;
 
 
 -- get photo format, width and height
@@ -56,15 +50,12 @@ BEGIN
 END;
 /
 
-BEGIN
-show_photo_details(1);
-END;
+-- BEGIN
+-- show_photo_details(1);
+-- END;
 
 
 -- change photo contrast 
-ALTER TABLE product_photo ADD modyf_img ORDImage;
-commit;
-
 set serveroutput on
 CREATE OR REPLACE PROCEDURE change_photo_contrast ( id IN NUMBER, value IN NUMBER ) IS
 BEGIN
@@ -91,9 +82,9 @@ BEGIN
 END;
 /
 
-BEGIN
-change_photo_contrast(1, 100);
-END;
+-- BEGIN
+-- change_photo_contrast(1, 100);
+-- END;
 
 
 -- export photo
@@ -114,6 +105,6 @@ BEGIN
 END;
 /
 
-BEGIN
-export_modified_photo(1, 'output.png');
-END;
+-- BEGIN
+-- export_modified_photo(1, 'output.png');
+-- END;
